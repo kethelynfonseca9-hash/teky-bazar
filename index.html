@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar</title>
+    <meta
+      name="description"
+      content="Catálogo online completo da TEKY BAZAR em São Pedro da Aldeia - RJ: materiais de construção, ferragens, madeiras, areia, pedra e bazar. Peça pelo WhatsApp."
+    />
+    <meta name="theme-color" content="#1E5BFF" />
+
+    <!-- Open Graph / Compartilhamento bonito no WhatsApp, Instagram e Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="TEKY BAZAR" />
+    <meta property="og:title" content="TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar" />
+    <meta
+      property="og:description"
+      content="Confira preços de materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia - RJ e peça direto no WhatsApp."
+    />
+    <meta property="og:image" content="./img/og-capa.jpg" />
+    <meta property="og:image:alt" content="Catálogo de produtos da loja TEKY BAZAR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar" />
+    <meta
+      name="twitter:description"
+      content="Confira preços de materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia - RJ e peça direto no WhatsApp."
+    />
+    <meta name="twitter:image" content="./img/og-capa.jpg" />
+
+    <!-- Fonte Poppins (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Dados Estruturados JSON-LD de Loja Local -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HardwareStore",
+        "name": "TEKY BAZAR",
+        "description": "Loja de materiais de construção, ferragens, madeiras, areia, pedra e utilidades domésticas em São Pedro da Aldeia - RJ.",
+        "image": "./img/og-capa.jpg",
+        "currenciesAccepted": "BRL",
+        "paymentAccepted": "Pix, Dinheiro, Cartão de Crédito, Cartão de Débito",
+        "priceRange": "$$",
+        "telephone": "+55-22-99771-1986",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Estr. da Cruz - Flexeira (Pinheiros)",
+          "addressLocality": "São Pedro da Aldeia",
+          "addressRegion": "RJ",
+          "postalCode": "28946-195",
+          "addressCountry": "BR"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "08:00",
+            "closes": "15:00"
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body class="bg-white text-[#1F2937] antialiased min-h-screen flex flex-col">
+    <!-- 1. ÚNICA NAVEGAÇÃO FIXA NO TOPO (Sticky) -->
+    <header class="site-header">
+      <div class="container-shell header-inner">
+        <a
+          href="#catalogo"
+          id="logo-loja"
+          class="brand-logo focus-ring"
+          aria-label="TEKY BAZAR - Ir para o Catálogo"
+        >
+          TEKY <span>BAZAR</span>
+        </a>
+
+        <!-- Links de navegação no computador (com sublinhado azul no item ativo) -->
+        <nav class="nav-desktop" aria-label="Navegação principal">
+          <a href="#catalogo" data-secao-link="catalogo" aria-current="page" class="top-nav-link focus-ring">Catálogo</a>
+          <a href="#como-comprar" data-secao-link="como-comprar" class="top-nav-link focus-ring">Como Comprar</a>
+          <a href="#entrega" data-secao-link="entrega" class="top-nav-link focus-ring">Entrega e Retirada</a>
+          <a href="#contato" data-secao-link="contato" class="top-nav-link focus-ring">Contato</a>
+        </nav>
+
+        <div class="header-actions">
+          <!-- Botão discreto de WhatsApp no cabeçalho -->
+          <a
+            href="https://wa.me/5522997711986"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-whatsapp-geral
+            class="btn-whatsapp btn-whatsapp-discreto focus-ring"
+            aria-label="Atendimento da TEKY BAZAR pelo WhatsApp"
+          >
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+
+          <!-- Botão Menu Hambúrguer no celular -->
+          <button
+            type="button"
+            id="btn-menu-mobile"
+            class="hamburger-btn focus-ring"
+            aria-expanded="false"
+            aria-controls="menu-mobile"
+            aria-label="Abrir menu de navegação"
+          >
+            <svg id="icone-menu-abrir" class="icon-md" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            <svg id="icone-menu-fechar" hidden class="icon-md" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Menu Mobile Expansível (mesmos links com sublinhado azul no item ativo) -->
+      <nav id="menu-mobile" hidden class="nav-mobile-drawer" aria-label="Menu principal mobile">
+        <div class="container-shell nav-mobile-list">
+          <a href="#catalogo" data-secao-link="catalogo" aria-current="page" class="top-nav-link focus-ring">Catálogo</a>
+          <a href="#como-comprar" data-secao-link="como-comprar" class="top-nav-link focus-ring">Como Comprar</a>
+          <a href="#entrega" data-secao-link="entrega" class="top-nav-link focus-ring">Entrega e Retirada</a>
+          <a href="#contato" data-secao-link="contato" class="top-nav-link focus-ring">Contato</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="conteudo-principal" class="flex-1">
+      <!-- ===================================================================
+           SEÇÃO 1: CATÁLOGO (#catalogo) — Único com Hero Grande
+           =================================================================== -->
+      <section id="secao-catalogo" data-secao-painel="catalogo">
+        <!-- Hero Grande (sem repetir "TEKY BAZAR" abaixo da logo) -->
+        <div class="hero-band">
+          <div class="container-shell hero-inner">
+            <div class="hero-copy">
+              <h1 class="hero-title">
+                Tudo para sua obra, reforma e casa em um só lugar
+              </h1>
+              <p class="hero-subtitle">
+                Materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia – RJ com pedido direto pelo celular.
+              </p>
+            </div>
+            <div class="hero-cta-wrap">
+              <a
+                href="https://wa.me/5522997711986"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-whatsapp-geral
+                class="btn-whatsapp btn-lg focus-ring"
+              >
+                <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+                </svg>
+                <span>Chamar no WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra Fixa ao Rolar: Busca + Botão Filtros + Chips de Categoria -->
+        <div class="catalog-sticky-controls">
+          <div class="container-shell">
+            <div class="search-filter-row">
+              <!-- Barra de Pesquisa -->
+              <div class="search-wrapper">
+                <label for="campo-busca" class="sr-only">Pesquisar por nome, código ou categoria</label>
+                <span class="search-icon" aria-hidden="true">
+                  <svg class="icon-md" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path stroke-linecap="round" d="m21 21-4.35-4.35"></path>
+                  </svg>
+                </span>
+                <input
+                  type="search"
+                  id="campo-busca"
+                  placeholder="Buscar por nome, código (ex: CIM-001) ou categoria..."
+                  autocomplete="off"
+                  class="search-input focus-ring"
+                />
+                <button
+                  type="button"
+                  id="btn-limpar-busca"
+                  hidden
+                  class="clear-search-btn focus-ring"
+                  aria-label="Limpar texto da pesquisa"
+                >
+                  <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Botão "Filtros" com contador de filtros ativos -->
+              <button
+                type="button"
+                id="btn-toggle-filtros"
+                class="btn-filter-toggle focus-ring"
+                aria-expanded="false"
+                aria-controls="painel-filtros"
+              >
+                <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" d="M4 6h16M7 12h10M10 18h4" />
+                </svg>
+                <span>Filtros</span>
+                <span id="contador-filtros-ativos" hidden class="filter-count-badge tabular-nums">0</span>
+              </button>
+            </div>
+
+            <!-- Painel de Filtros Recolhido (compacto em linha única no computador) -->
+            <div id="painel-filtros" hidden class="filters-panel">
+              <div class="filters-inline-row">
+                <div class="filter-field">
+                  <label for="filtro-ordem" class="filter-label">Ordenar por</label>
+                  <select id="filtro-ordem" class="filter-select focus-ring">
+                    <option value="padrao">Destaques da loja</option>
+                    <option value="menor-preco">Menor preço</option>
+                    <option value="maior-preco">Maior preço</option>
+                    <option value="az">Nome (A–Z)</option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label for="filtro-disponibilidade" class="filter-label">Disponibilidade</label>
+                  <select id="filtro-disponibilidade" class="filter-select focus-ring">
+                    <option value="todos">Todos os produtos</option>
+                    <option value="disponiveis">Somente disponíveis</option>
+                    <option value="promocao">Somente em promoção</option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label for="filtro-preco" class="filter-label">Faixa de preço</label>
+                  <select id="filtro-preco" class="filter-select focus-ring">
+                    <option value="todos">Qualquer valor</option>
+                    <option value="ate-30">Até R$ 30,00</option>
+                    <option value="30-100">De R$ 30,00 a R$ 100,00</option>
+                    <option value="acima-100">Acima de R$ 100,00</option>
+                  </select>
+                </div>
+
+                <div class="filter-actions-col">
+                  <button
+                    type="button"
+                    id="btn-resetar-filtros"
+                    hidden
+                    class="btn-outline-sm focus-ring"
+                  >
+                    Limpar filtros
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chips de Categorias Roláveis na Horizontal -->
+            <div
+              id="lista-categorias"
+              class="category-scroll"
+              role="tablist"
+              aria-label="Filtrar por categoria"
+            >
+              <!-- Preenchido via script.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de Produtos -->
+        <div class="container-shell catalog-body">
+          <div class="catalog-status-bar">
+            <p id="contador-produtos" class="catalog-count tabular-nums" aria-live="polite">
+              Carregando catálogo...
+            </p>
+            <button
+              type="button"
+              id="btn-limpar-rapido"
+              hidden
+              class="link-reset focus-ring"
+            >
+              Limpar busca e filtros
+            </button>
+          </div>
+
+          <div id="grade-produtos" class="product-grid">
+            <!-- Cards gerados via script.js -->
+          </div>
+
+          <!-- Estado Vazio -->
+          <div id="estado-vazio" hidden class="empty-state">
+            <div class="empty-icon" aria-hidden="true">
+              <svg class="icon-lg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path stroke-linecap="round" d="m21 21-4.35-4.35"></path>
+              </svg>
+            </div>
+            <h2 class="empty-title">Nenhum produto encontrado</h2>
+            <p class="empty-desc">
+              Tente outro termo de pesquisa ou limpe os filtros selecionados. Se preferir, chame nossa equipe no WhatsApp.
+            </p>
+            <div class="empty-actions">
+              <button type="button" id="btn-vazio-limpar" class="btn-secondary focus-ring">
+                Mostrar todos os itens
+              </button>
+              <a
+                href="https://wa.me/5522997711986"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-whatsapp-geral
+                class="btn-whatsapp focus-ring"
+              >
+                Perguntar no WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SEÇÃO 2: COMO COMPRAR (#como-comprar) — Título compacto de 1 linha
+           =================================================================== -->
+      <section id="secao-como-comprar" data-secao-painel="como-comprar" hidden>
+        <div class="compact-page-header">
+          <div class="container-shell">
+            <h1 class="compact-page-title">Como comprar — atendimento direto, sem cadastro</h1>
+          </div>
+        </div>
+
+        <div class="container-shell section-body">
+          <div class="info-cards-grid-4">
+            <article class="surface-card">
+              <div class="feature-icon-box" aria-hidden="true">
+                <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="11" cy="11" r="7" />
+                  <path stroke-linecap="round" d="m20 20-3.8-3.8" />
+                </svg>
+              </div>
+              <h2 class="card-heading">01. Escolha no catálogo</h2>
+              <p class="card-copy">
+                Pesquise pelo nome, código ou navegue pelas categorias para conferir os preços e unidades de venda.
+              </p>
+            </article>
+
+            <article class="surface-card">
+              <div class="feature-icon-box" aria-hidden="true">
+                <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" />
+                </svg>
+              </div>
+              <h2 class="card-heading">02. Toque em Pedir</h2>
+              <p class="card-copy">
+                Ao clicar em <strong>Pedir no WhatsApp</strong>, a mensagem já abre preenchida com nome, código e valor do produto.
+              </p>
+            </article>
+
+            <article class="surface-card">
+              <div class="feature-icon-box" aria-hidden="true">
+                <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </div>
+              <h2 class="card-heading">03. Confirme a quantidade</h2>
+              <p class="card-copy">
+                Informe a quantidade ou mande a lista completa da sua obra para montarmos seu orçamento na hora.
+              </p>
+            </article>
+
+            <article class="surface-card">
+              <div class="feature-icon-box" aria-hidden="true">
+                <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <path stroke-linecap="round" d="M2 10h20" />
+                </svg>
+              </div>
+              <h2 class="card-heading">04. Formas de pagamento</h2>
+              <p class="card-copy">
+                Aceitamos <strong>Pix</strong>, <strong>dinheiro</strong> e <strong>cartões de débito e crédito</strong> (na loja ou na maquininha na entrega).
+              </p>
+            </article>
+          </div>
+
+          <div class="callout-banner">
+            <div>
+              <h2 class="callout-title">Pronto para montar seu pedido?</h2>
+              <p class="callout-desc">
+                Volte ao catálogo para escolher os itens ou envie sua lista direto para nosso balcão de vendas.
+              </p>
+            </div>
+            <div class="callout-actions">
+              <a href="#catalogo" class="btn-secondary focus-ring">Ir para o Catálogo</a>
+              <a
+                href="https://wa.me/5522997711986"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-whatsapp-geral
+                class="btn-whatsapp focus-ring"
+              >
+                Enviar lista no WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SEÇÃO 3: ENTREGA E RETIRADA (#entrega) — Título compacto de 1 linha
+           =================================================================== -->
+      <section id="secao-entrega" data-secao-painel="entrega" hidden>
+        <div class="compact-page-header">
+          <div class="container-shell">
+            <h1 class="compact-page-title">Entrega rápida e retirada na loja em São Pedro da Aldeia</h1>
+          </div>
+        </div>
+
+        <div class="container-shell section-body">
+          <!-- 3 Cartões com ícones padronizados, grandes e traço azul -->
+          <div class="info-cards-grid-3">
+            <article class="surface-card">
+              <div class="feature-icon-box-lg" aria-hidden="true">
+                <svg class="feature-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+              </div>
+              <h2 class="card-heading-lg">Entrega em toda a região</h2>
+              <p class="card-copy">
+                Atendemos residências, condomínios e obras em São Pedro da Aldeia e arredores com agilidade e hora combinada.
+              </p>
+            </article>
+
+            <!-- Ícone do meio: Caminhão Basculante reconhecível com carga -->
+            <article class="surface-card">
+              <div class="feature-icon-box-lg" aria-hidden="true">
+                <svg class="feature-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 9h11l-1.5 6H3.5L2 9Z" />
+                  <path d="M4.5 9 7.5 6l3.5 3" />
+                  <path d="M13 11h4.2l2.8 3.2V17h-7v-6Z" />
+                  <path d="M2 17h18" />
+                  <circle cx="6.5" cy="18.5" r="2" />
+                  <circle cx="16.5" cy="18.5" r="2" />
+                </svg>
+              </div>
+              <h2 class="card-heading-lg">Caminhão basculante e utilitário</h2>
+              <p class="card-copy">
+                Transporte preparado tanto para descarga de <strong>areia e pedra em m³</strong> quanto para madeiras, sacarias de cimento, ferragens e bazar.
+              </p>
+            </article>
+
+            <article class="surface-card">
+              <div class="feature-icon-box-lg" aria-hidden="true">
+                <svg class="feature-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18" />
+                  <path d="M5 21V8l7-4 7 4v13" />
+                  <path d="M9 21v-6h6v6" />
+                </svg>
+              </div>
+              <h2 class="card-heading-lg">Retirada rápida sem frete</h2>
+              <p class="card-copy">
+                Peça pelo WhatsApp e retire seu material já separado no balcão em <strong>Estr. da Cruz – Flexeira (Pinheiros)</strong>, sem fila e sem taxa.
+              </p>
+            </article>
+          </div>
+
+          <!-- Lista de Bairros Atendidos -->
+          <div class="neighborhoods-box">
+            <h2 class="section-subheading">Bairros e localidades atendidas</h2>
+            <p class="card-copy">
+              Realizamos entregas rápidas em <strong>Flexeira</strong>, <strong>Pinheiros</strong>, <strong>Centro de São Pedro da Aldeia</strong>, São João, Vinhateiro, Baixo Grande, Campo Redondo, Porto da Aldeia, Balneário, Nova São Pedro e demais bairros da região.
+            </p>
+            <div class="neighborhoods-cta">
+              <a
+                id="btn-consultar-frete"
+                href="https://wa.me/5522997711986"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-whatsapp focus-ring"
+              >
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+                </svg>
+                <span>Consultar frete no WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Seção "Como pedir" em 3 passos -->
+          <div class="steps-section">
+            <h2 class="section-subheading">Como pedir em 3 passos</h2>
+            <div class="steps-grid-3">
+              <div class="step-item">
+                <span class="step-number tabular-nums">1</span>
+                <div>
+                  <h3 class="card-heading">Escolher o produto</h3>
+                  <p class="card-copy">Confira os materiais, códigos e preços atualizados no nosso catálogo.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-number tabular-nums">2</span>
+                <div>
+                  <h3 class="card-heading">Chamar no WhatsApp</h3>
+                  <p class="card-copy">Envie o item desejado e seu bairro para confirmarmos estoque e frete.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-number tabular-nums">3</span>
+                <div>
+                  <h3 class="card-heading">Receber ou retirar</h3>
+                  <p class="card-copy">Receba rapidinho no seu endereço ou retire pronto na loja sem custo de entrega.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SEÇÃO 4: CONTATO E LOCALIZAÇÃO (#contato) — Título compacto 1 linha
+           =================================================================== -->
+      <section id="secao-contato" data-secao-painel="contato" hidden>
+        <div class="compact-page-header">
+          <div class="container-shell">
+            <h1 class="compact-page-title">Contato, horários e localização da loja</h1>
+          </div>
+        </div>
+
+        <div class="container-shell section-body">
+          <div class="contact-layout">
+            <!-- Coluna de Informações + Tabela de Horários -->
+            <div class="contact-card">
+              <div class="contact-header-row">
+                <h2 class="section-subheading">Atendimento e endereço</h2>
+                <!-- Selo calculado via JS: Aberto agora / Fechado · abre às 08h -->
+                <span id="selo-status-horario" class="store-hours-badge store-closed">
+                  Verificando horário...
+                </span>
+              </div>
+
+              <!-- Endereço + Botão Copiar Endereço -->
+              <div class="contact-block">
+                <p class="contact-label">Endereço</p>
+                <p id="info-endereco" class="contact-value">
+                  Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195
+                </p>
+                <div class="address-actions">
+                  <button
+                    type="button"
+                    id="btn-copiar-endereco"
+                    class="btn-outline-sm focus-ring"
+                  >
+                    <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span id="texto-copiar-endereco">Copiar endereço</span>
+                  </button>
+
+                  <a
+                    id="link-como-chegar-contato"
+                    href="https://www.google.com/maps/dir//Estr.%20da%20Cruz%20-%20Flexeira%20(Pinheiros)%2C%20S%C3%A3o%20Pedro%20da%20Aldeia%20-%20RJ%2C%20CEP%2028946-195"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-outline-sm focus-ring"
+                  >
+                    <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z" />
+                      <circle cx="12" cy="10" r="2.5" />
+                    </svg>
+                    <span>Como chegar</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Telefone e WhatsApp -->
+              <div class="contact-block">
+                <p class="contact-label">Telefone e WhatsApp</p>
+                <a
+                  id="info-telefone-link"
+                  href="tel:+5522997711986"
+                  class="phone-highlight tabular-nums focus-ring"
+                >
+                  <span id="info-telefone">(22) 99771-1986</span>
+                </a>
+              </div>
+
+              <!-- Tabela de Horários com Dia de Hoje Destacado -->
+              <div class="contact-block">
+                <p class="contact-label">Horário de funcionamento</p>
+                <div class="hours-table-wrap">
+                  <table id="tabela-horarios" class="hours-table" aria-label="Tabela de horários de funcionamento">
+                    <tbody>
+                      <tr data-dia-semana="1">
+                        <td>Segunda-feira</td>
+                        <td class="tabular-nums">08h às 18h</td>
+                      </tr>
+                      <tr data-dia-semana="2">
+                        <td>Terça-feira</td>
+                        <td class="tabular-nums">08h às 18h</td>
+                      </tr>
+                      <tr data-dia-semana="3">
+                        <td>Quarta-feira</td>
+                        <td class="tabular-nums">08h às 18h</td>
+                      </tr>
+                      <tr data-dia-semana="4">
+                        <td>Quinta-feira</td>
+                        <td class="tabular-nums">08h às 18h</td>
+                      </tr>
+                      <tr data-dia-semana="5">
+                        <td>Sexta-feira</td>
+                        <td class="tabular-nums">08h às 18h</td>
+                      </tr>
+                      <tr data-dia-semana="6">
+                        <td>Sábado</td>
+                        <td class="tabular-nums">08h às 15h</td>
+                      </tr>
+                      <tr data-dia-semana="0">
+                        <td>Domingo</td>
+                        <td>Fechado</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Botões de Contato Direto -->
+              <div class="contact-cta-group">
+                <a
+                  href="https://wa.me/5522997711986"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-whatsapp-geral
+                  class="btn-whatsapp btn-lg w-full focus-ring"
+                >
+                  <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+                  </svg>
+                  <span>Chamar no WhatsApp</span>
+                </a>
+
+                <a
+                  id="btn-ligar-agora"
+                  href="tel:+5522997711986"
+                  class="btn-secondary w-full focus-ring"
+                >
+                  <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5Z" />
+                  </svg>
+                  <span>Ligar (22) 99771-1986</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Mapa Google Maps apontando para o endereço completo exato -->
+            <div class="map-frame-box">
+              <div class="map-placeholder" aria-hidden="true">
+                <svg class="feature-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                <p class="map-placeholder-title">TEKY BAZAR</p>
+                <p class="map-placeholder-sub">Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195</p>
+              </div>
+              <iframe
+                id="mapa-iframe"
+                title="Localização exata da TEKY BAZAR em Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195"
+                src="https://maps.google.com/maps?q=Estr.%20da%20Cruz%20-%20Flexeira%20(Pinheiros)%2C%20S%C3%A3o%20Pedro%20da%20Aldeia%20-%20RJ%2C%20CEP%2028946-195&z=16&ie=UTF8&iwloc=&output=embed"
+                class="map-iframe"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé com Link do Instagram -->
+    <footer class="site-footer">
+      <div class="container-shell footer-inner">
+        <div class="footer-brand">
+          <p class="footer-title" id="rodape-nome-loja">TEKY BAZAR</p>
+          <p class="footer-meta">
+            Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195 · (22) 99771-1986
+          </p>
+        </div>
+
+        <a
+          id="link-instagram"
+          href="https://instagram.com/tekybazar"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="instagram-link focus-ring"
+          aria-label="Visitar perfil da TEKY BAZAR no Instagram"
+        >
+          <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          </svg>
+          <span>Siga no Instagram</span>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Modal de Detalhes do Produto -->
+    <div
+      id="modal-produto"
+      hidden
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-titulo"
+    >
+      <div class="modal-panel">
+        <div class="modal-media">
+          <div id="modal-container-imagem" class="modal-img-slot img-skeleton"></div>
+          <button
+            type="button"
+            id="btn-fechar-modal"
+            class="modal-close-btn focus-ring"
+            aria-label="Fechar detalhes do produto"
+          >
+            <svg class="icon-md" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-content">
+          <div class="modal-meta-row">
+            <span id="modal-meta" class="modal-meta-text tabular-nums"></span>
+            <span id="modal-disponibilidade"></span>
+          </div>
+
+          <div>
+            <h2 id="modal-titulo" class="modal-title"></h2>
+            <p id="modal-descricao" class="modal-desc"></p>
+          </div>
+
+          <div class="modal-price-box">
+            <div>
+              <span id="modal-preco-antigo" class="price-old tabular-nums" hidden></span>
+              <div class="price-inline">
+                <span id="modal-preco-atual" class="modal-price-current tabular-nums"></span>
+                <span id="modal-unidade" class="modal-price-unit"></span>
+              </div>
+            </div>
+            <span id="modal-selo-promocao" hidden class="modal-promo-pill">
+              Promoção
+            </span>
+          </div>
+
+          <a
+            id="modal-btn-whatsapp"
+            href="https://wa.me/5522997711986"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-whatsapp btn-lg w-full focus-ring"
+          >
+            <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+            </svg>
+            <span>Pedir no WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão Flutuante de WhatsApp (somente computador > 768px) -->
+    <a
+      href="https://wa.me/5522997711986"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-whatsapp-geral
+      class="whatsapp-fab focus-ring"
+      aria-label="Conversar no WhatsApp com a TEKY BAZAR"
+    >
+      <svg class="icon-lg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+      </svg>
+    </a>
+
+    <!-- Barra Fixa Inferior no Celular (até 768px): WhatsApp | Ligar | Como chegar -->
+    <nav class="mobile-bottom-bar" aria-label="Ações rápidas no celular">
+      <a
+        href="https://wa.me/5522997711986"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-whatsapp-geral
+        class="btn-whatsapp mobile-action-btn focus-ring"
+      >
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+
+      <a
+        id="mobile-btn-ligar"
+        href="tel:+5522997711986"
+        class="btn-mobile-blue mobile-action-btn focus-ring"
+      >
+        <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5Z" />
+        </svg>
+        <span>Ligar</span>
+      </a>
+
+      <a
+        id="mobile-btn-rota"
+        href="https://www.google.com/maps/dir//Estr.%20da%20Cruz%20-%20Flexeira%20(Pinheiros)%2C%20S%C3%A3o%20Pedro%20da%20Aldeia%20-%20RJ%2C%20CEP%2028946-195"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-mobile-blue mobile-action-btn focus-ring"
+      >
+        <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z" />
+          <circle cx="12" cy="10" r="2.5" />
+        </svg>
+        <span>Como chegar</span>
+      </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="./env-config.js" onerror="window.ENV_CONFIG={}"></script>
+    <script src="./script.js" defer></script>
+  </body>
+</html>

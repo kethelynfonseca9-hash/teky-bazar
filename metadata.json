@@ -1,0 +1,6 @@
+{
+  "name": "TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar",
+  "description": "Catálogo online completo da TEKY BAZAR: materiais de construção, ferragens, madeiras, areia, pedra e utilidades. Confira preços e peça direto pelo WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
