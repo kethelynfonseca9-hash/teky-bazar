@@ -438,7 +438,9 @@ const CATEGORIAS = [
   "Bazar"
 ];
 
-const SECOES_VALIDAS = ["catalogo", "como-comprar", "entrega", "contato"];
+const SECOES_VALIDAS = ["catalogo", "como-comprar", "entrega", "contato", "admin"];
+
+const PRODUTOS_LOCAIS_INICIAIS = PRODUTOS.map((item) => ({ ...item }));
 
 const estado = {
   secaoAtiva: "catalogo",
@@ -729,7 +731,7 @@ function filtrarProdutos() {
     if (estado.ordem === "az") {
       return a.nome.localeCompare(b.nome, "pt-BR");
     }
-    return a.id - b.id;
+    return (Number(a.ordem ?? a.id) || 0) - (Number(b.ordem ?? b.id) || 0);
   });
 
   return filtrados;
@@ -777,7 +779,7 @@ function criarCardProduto(produto) {
     <article
       class="product-card focus-ring"
       tabindex="0"
-      data-produto-id="${produto.id}"
+      data-produto-id="${escaparHtml(String(produto.id))}"
       aria-label="Ver detalhes de ${escaparHtml(produto.nome)}"
     >
       <div class="product-media img-skeleton">
@@ -888,7 +890,7 @@ function atualizarCatalogo() {
    MODAL DE DETALHES DO PRODUTO
    ========================================================================== */
 function abrirModalProduto(idProduto) {
-  const produto = PRODUTOS.find((item) => item.id === Number(idProduto));
+  const produto = PRODUTOS.find((item) => String(item.id) === String(idProduto));
   if (!produto) return;
 
   estado.ultimoElementoFocado = document.activeElement;
@@ -1213,6 +1215,26 @@ function registrarEventos() {
     }
   });
 }
+
+window.TEKY_CATALOGO = {
+  obterProdutosIniciais() {
+    return PRODUTOS_LOCAIS_INICIAIS.map((item) => ({ ...item }));
+  },
+  aplicarProdutosFirestore(listaNuvem) {
+    if (Array.isArray(listaNuvem) && listaNuvem.length > 0) {
+      PRODUTOS.splice(0, PRODUTOS.length, ...listaNuvem);
+    } else {
+      PRODUTOS.splice(
+        0,
+        PRODUTOS.length,
+        ...PRODUTOS_LOCAIS_INICIAIS.map((item) => ({ ...item }))
+      );
+    }
+    if (document.getElementById("grade-produtos")) {
+      atualizarCatalogo();
+    }
+  }
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   aplicarDadosLoja();

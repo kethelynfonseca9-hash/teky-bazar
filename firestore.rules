@@ -1,0 +1,169 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net (Default-Deny Catch-All)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() && request.auth.token.email == 'kethelyn.fonseca9@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isVerifiedUser() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // 3. Validation Blueprints (Synchronized verbatim with firebase-blueprint.json)
+    function isValidProduct(data) {
+      return isSignedIn() &&
+        data.keys().hasAll([
+          'codigo', 'nome', 'categoria', 'preco', 'unidade',
+          'descricao', 'imagem', 'disponivel', 'promocao',
+          'precoPromocional', 'publicado', 'ordem',
+          'authorId', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'codigo', 'nome', 'categoria', 'preco', 'unidade',
+          'descricao', 'imagem', 'disponivel', 'promocao',
+          'precoPromocional', 'publicado', 'ordem',
+          'authorId', 'createdAt', 'updatedAt'
+        ]) &&
+        data.codigo is string && data.codigo.size() >= 2 && data.codigo.size() <= 24 &&
+        data.codigo.matches('^[A-Za-z0-9_\\-]+$') &&
+        data.nome is string && data.nome.size() >= 2 && data.nome.size() <= 120 &&
+        data.categoria is string && data.categoria.size() >= 4 && data.categoria.size() <= 40 &&
+        data.categoria in [
+          'Materiais de Construção',
+          'Ferragens',
+          'Madeiras',
+          'Areia',
+          'Pedra',
+          'Bazar'
+        ] &&
+        (data.preco is int || data.preco is float) &&
+        data.preco > 0 && data.preco <= 1000000 &&
+        data.unidade is string && data.unidade.size() >= 1 && data.unidade.size() <= 30 &&
+        data.descricao is string && data.descricao.size() >= 4 && data.descricao.size() <= 500 &&
+        data.imagem is string && data.imagem.size() >= 4 && data.imagem.size() <= 500 &&
+        data.disponivel is bool &&
+        data.promocao is bool &&
+        (data.precoPromocional is int || data.precoPromocional is float) &&
+        data.precoPromocional >= 0 && data.precoPromocional <= 1000000 &&
+        (
+          (!data.promocao && data.precoPromocional == 0) ||
+          (data.promocao && data.precoPromocional > 0 && data.precoPromocional < data.preco)
+        ) &&
+        data.publicado is bool &&
+        data.ordem is int && data.ordem >= 1 && data.ordem <= 10000 &&
+        data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 &&
+        data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.authorId == request.auth.uid &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidAdminRecord(data, adminId) {
+      return isSignedIn() &&
+        data.keys().hasAll(['uid', 'displayName', 'grantedBy', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'displayName', 'grantedBy', 'createdAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 &&
+        data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == adminId &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 80 &&
+        data.grantedBy is string && data.grantedBy.size() >= 1 && data.grantedBy.size() <= 128 &&
+        data.grantedBy.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.grantedBy == request.auth.uid &&
+        data.createdAt is timestamp;
+    }
+
+    // 4. Collection: /products/{productId}
+    match /products/{productId} {
+      allow get: if isValidId(productId) && (
+        existing().publicado == true || isAdmin()
+      );
+
+      // Query Enforcer: Zero get()/exists() calls inside allow list
+      allow list: if existing().publicado == true || (
+        isVerifiedUser() && existing().authorId == request.auth.uid
+      ) || isBootstrappedAdmin();
+
+      allow create: if isValidProduct(incoming()) &&
+        isVerifiedUser() &&
+        isValidId(productId) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        isAdmin();
+
+      allow update: if (
+        isValidProduct(incoming()) &&
+        isVerifiedUser() &&
+        isValidId(productId) &&
+        incoming().authorId == existing().authorId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        isAdmin() && (
+          // Action: Stock & Catalog Visibility Toggle
+          incoming().diff(existing()).affectedKeys().hasOnly(['disponivel', 'publicado', 'updatedAt']) ||
+          // Action: Price & Promotion Update
+          incoming().diff(existing()).affectedKeys().hasOnly(['preco', 'promocao', 'precoPromocional', 'updatedAt']) ||
+          // Action: Full Product Details Edit
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'codigo', 'nome', 'categoria', 'preco', 'unidade',
+            'descricao', 'imagem', 'disponivel', 'promocao',
+            'precoPromocional', 'publicado', 'ordem', 'updatedAt'
+          ])
+        )
+      );
+
+      allow delete: if isVerifiedUser() &&
+        isValidId(productId) &&
+        isAdmin();
+    }
+
+    // 5. Collection: /admins/{adminId}
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) &&
+        isVerifiedUser() &&
+        (request.auth.uid == adminId || isBootstrappedAdmin());
+
+      allow list: if false;
+
+      allow create: if isValidAdminRecord(incoming(), adminId) &&
+        isVerifiedUser() &&
+        isValidId(adminId) &&
+        incoming().createdAt == request.time &&
+        isBootstrappedAdmin();
+
+      allow update: if false;
+
+      allow delete: if isValidId(adminId) &&
+        isBootstrappedAdmin();
+    }
+  }
+}

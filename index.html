@@ -690,9 +690,238 @@
           </div>
         </div>
       </section>
+
+      <!-- =====================================================================
+           SEÇÃO 5: ÁREA DA LOJA (GERENCIAMENTO EM TEMPO REAL VIA FIREBASE)
+           ===================================================================== -->
+      <section id="secao-admin" data-secao-painel="admin" hidden aria-label="Área administrativa da loja">
+        <div class="compact-page-header">
+          <div class="container-shell compact-header-row">
+            <h1 class="compact-page-title">Área da Loja · Gerenciar Catálogo</h1>
+            <a href="#catalogo" data-secao-link="catalogo" class="back-catalog-link focus-ring">← Voltar ao catálogo</a>
+          </div>
+        </div>
+
+        <div class="container-shell section-body">
+          <div id="admin-feedback" class="admin-feedback-banner" hidden role="status" aria-live="polite"></div>
+
+          <!-- Estado desconectado -->
+          <div id="admin-login-box" class="info-card admin-auth-card">
+            <h2 class="section-subheading">Acesso Administrativo</h2>
+            <p class="admin-helper-text">
+              Entre com a conta Google autorizada da loja para cadastrar itens, alterar preços, ativar promoções e atualizar estoque em tempo real no catálogo.
+            </p>
+            <button type="button" id="btn-admin-google-login" class="btn-primary-blue focus-ring">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M21.35 11.1H12v2.92h5.35c-.25 1.42-1.06 2.62-2.26 3.42v2.84h3.65c2.14-1.97 3.37-4.88 3.37-8.33 0-.57-.05-1.12-.16-1.65h-.6Z" />
+                <path d="M12 21c2.97 0 5.46-.98 7.28-2.66l-3.65-2.84c-.99.67-2.26 1.07-3.63 1.07-2.79 0-5.15-1.88-6-4.41H2.23v2.92A10.99 10.99 0 0 0 12 21Z" />
+                <path d="M6 12.16a6.6 6.6 0 0 1 0-4.32V4.92H2.23a11 11 0 0 0 0 10.16L6 12.16Z" />
+                <path d="M12 5.43c1.6 0 3.04.55 4.17 1.63l3.12-3.12C17.45 2.19 14.97 1 12 1A10.99 10.99 0 0 0 2.23 4.92L6 7.84c.85-2.53 3.21-4.41 6-4.41Z" />
+              </svg>
+              <span>Entrar com Google</span>
+            </button>
+          </div>
+
+          <!-- Estado autenticado sem permissão -->
+          <div id="admin-negado-box" class="info-card admin-auth-card" hidden>
+            <h2 class="section-subheading">Acesso restrito</h2>
+            <p class="admin-helper-text">
+              A conta <strong id="admin-negado-email"></strong> não possui permissão administrativa para editar o catálogo da TEKY BAZAR.
+            </p>
+            <button type="button" id="btn-admin-sair-negado" class="btn-outline-sm focus-ring">
+              Sair desta conta
+            </button>
+          </div>
+
+          <!-- Painel completo do administrador -->
+          <div id="admin-conteudo" class="admin-workspace" hidden>
+            <div class="admin-topbar">
+              <div>
+                <p class="admin-user-label">Conectado como administrador</p>
+                <p id="admin-usuario-email" class="admin-user-email"></p>
+              </div>
+              <button type="button" id="btn-admin-logout" class="btn-outline-sm focus-ring">
+                Sair
+              </button>
+            </div>
+
+            <!-- Banner inicial para popular o Firestore com os 30 produtos atuais -->
+            <div id="admin-seed-banner" class="admin-seed-card" hidden>
+              <div>
+                <h2 class="admin-seed-title">Ativar catálogo na nuvem (30 produtos atuais)</h2>
+                <p class="admin-seed-desc">
+                  Seu banco de dados na nuvem ainda está vazio. Clique ao lado para copiar os 30 produtos atuais do catálogo para o Firebase e editá-los livremente pelo celular ou computador.
+                </p>
+              </div>
+              <button type="button" id="btn-sincronizar-iniciais" class="btn-primary-blue focus-ring">
+                Publicar 30 produtos na nuvem
+              </button>
+            </div>
+
+            <div class="admin-grid">
+              <!-- Formulário de cadastro / edição -->
+              <form id="form-admin-produto" class="info-card admin-form-card" novalidate>
+                <h2 id="titulo-form-admin" class="section-subheading">Cadastrar novo produto</h2>
+                <input type="hidden" id="admin-produto-id" value="" />
+                <input type="hidden" id="admin-produto-ordem" value="" />
+
+                <div class="admin-field-row">
+                  <div class="admin-field">
+                    <label for="admin-codigo" class="filter-label">Código *</label>
+                    <input
+                      type="text"
+                      id="admin-codigo"
+                      class="admin-input focus-ring"
+                      placeholder="Ex.: CIM-001"
+                      maxlength="24"
+                      required
+                    />
+                  </div>
+
+                  <div class="admin-field">
+                    <label for="admin-categoria" class="filter-label">Categoria *</label>
+                    <select id="admin-categoria" class="filter-select focus-ring" required>
+                      <option value="Materiais de Construção">Materiais de Construção</option>
+                      <option value="Ferragens">Ferragens</option>
+                      <option value="Madeiras">Madeiras</option>
+                      <option value="Areia">Areia</option>
+                      <option value="Pedra">Pedra</option>
+                      <option value="Bazar">Bazar</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-nome" class="filter-label">Nome do produto *</label>
+                  <input
+                    type="text"
+                    id="admin-nome"
+                    class="admin-input focus-ring"
+                    placeholder="Ex.: Cimento CSN CP II-E 50kg"
+                    maxlength="120"
+                    required
+                  />
+                </div>
+
+                <div class="admin-field-row">
+                  <div class="admin-field">
+                    <label for="admin-preco" class="filter-label">Preço normal (R$) *</label>
+                    <input
+                      type="number"
+                      id="admin-preco"
+                      class="admin-input tabular-nums focus-ring"
+                      placeholder="36.90"
+                      min="0.01"
+                      max="1000000"
+                      step="0.01"
+                      required
+                    />
+                  </div>
+
+                  <div class="admin-field">
+                    <label for="admin-unidade" class="filter-label">Unidade de venda *</label>
+                    <input
+                      type="text"
+                      id="admin-unidade"
+                      class="admin-input focus-ring"
+                      placeholder="Ex.: saco 50kg, m³, unidade"
+                      maxlength="30"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="admin-promo-box">
+                  <label class="admin-checkbox-label">
+                    <input type="checkbox" id="admin-promocao" class="admin-checkbox focus-ring" />
+                    <span>Ativar preço promocional neste item</span>
+                  </label>
+
+                  <div id="admin-campo-preco-promo" class="admin-field" hidden>
+                    <label for="admin-preco-promocional" class="filter-label">Preço promocional (R$) *</label>
+                    <input
+                      type="number"
+                      id="admin-preco-promocional"
+                      class="admin-input tabular-nums focus-ring"
+                      placeholder="35.90"
+                      min="0.01"
+                      max="1000000"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-imagem" class="filter-label">Foto (caminho local ou URL https) *</label>
+                  <input
+                    type="text"
+                    id="admin-imagem"
+                    class="admin-input focus-ring"
+                    placeholder="img/cimento-cp2.jpg"
+                    maxlength="500"
+                    required
+                  />
+                </div>
+
+                <div class="admin-field">
+                  <label for="admin-descricao" class="filter-label">Descrição do produto *</label>
+                  <textarea
+                    id="admin-descricao"
+                    class="admin-textarea focus-ring"
+                    rows="3"
+                    placeholder="Descreva aplicações e características principais do produto..."
+                    maxlength="500"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="admin-toggles-row">
+                  <label class="admin-checkbox-label">
+                    <input type="checkbox" id="admin-disponivel" class="admin-checkbox focus-ring" checked />
+                    <span>Disponível em estoque</span>
+                  </label>
+
+                  <label class="admin-checkbox-label">
+                    <input type="checkbox" id="admin-publicado" class="admin-checkbox focus-ring" checked />
+                    <span>Visível no catálogo</span>
+                  </label>
+                </div>
+
+                <div class="admin-form-actions">
+                  <button type="submit" id="btn-salvar-produto" class="btn-primary-blue focus-ring">
+                    Salvar produto
+                  </button>
+                  <button type="button" id="btn-cancelar-edicao" class="btn-outline-sm focus-ring" hidden>
+                    Cancelar edição
+                  </button>
+                </div>
+              </form>
+
+              <!-- Lista de produtos salvos no Firebase -->
+              <div class="info-card admin-list-card">
+                <div class="admin-list-header">
+                  <div>
+                    <h2 class="section-subheading">Produtos na nuvem</h2>
+                    <p id="admin-contador-produtos" class="admin-count-text tabular-nums">0 itens cadastrados</p>
+                  </div>
+                  <input
+                    type="search"
+                    id="admin-busca-produtos"
+                    class="admin-input admin-search-sm focus-ring"
+                    placeholder="Filtrar por nome ou código..."
+                    aria-label="Filtrar produtos cadastrados"
+                  />
+                </div>
+
+                <div id="admin-lista-produtos" class="admin-items-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Rodapé com Link do Instagram -->
+    <!-- Rodapé com Link do Instagram e acesso discreto da loja -->
     <footer class="site-footer">
       <div class="container-shell footer-inner">
         <div class="footer-brand">
@@ -702,21 +931,31 @@
           </p>
         </div>
 
-        <a
-          id="link-instagram"
-          href="https://instagram.com/tekybazar"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="instagram-link focus-ring"
-          aria-label="Visitar perfil da TEKY BAZAR no Instagram"
-        >
-          <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-          </svg>
-          <span>Siga no Instagram</span>
-        </a>
+        <div class="footer-actions">
+          <a
+            id="link-instagram"
+            href="https://instagram.com/tekybazar"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="instagram-link focus-ring"
+            aria-label="Visitar perfil da TEKY BAZAR no Instagram"
+          >
+            <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            <span>Siga no Instagram</span>
+          </a>
+
+          <a
+            href="#admin"
+            data-secao-link="admin"
+            class="admin-footer-link focus-ring"
+          >
+            Área da Loja
+          </a>
+        </div>
       </div>
     </footer>
 
@@ -842,5 +1081,6 @@
     <!-- Scripts -->
     <script src="./env-config.js" onerror="window.ENV_CONFIG={}"></script>
     <script src="./script.js" defer></script>
+    <script type="module" src="./src/firebase-catalog.ts"></script>
   </body>
 </html>
