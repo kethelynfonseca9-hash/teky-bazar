@@ -83,7 +83,7 @@ service cloud.firestore {
         data.ordem is int && data.ordem >= 1 && data.ordem <= 10000 &&
         data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 &&
         data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
-        data.authorId == request.auth.uid &&
+        (data.authorId == request.auth.uid || isAdmin()) &&
         data.createdAt is timestamp &&
         data.updatedAt is timestamp;
     }
@@ -102,10 +102,35 @@ service cloud.firestore {
         data.createdAt is timestamp;
     }
 
+    function isValidCustomerReview(data, reviewId) {
+      return isSignedIn() &&
+        data.keys().hasAll([
+          'autorNome', 'bairro', 'nota', 'comentario',
+          'publicado', 'authorId', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'autorNome', 'bairro', 'nota', 'comentario',
+          'publicado', 'authorId', 'createdAt', 'updatedAt'
+        ]) &&
+        data.autorNome is string && data.autorNome.size() >= 2 && data.autorNome.size() <= 60 &&
+        data.bairro is string && data.bairro.size() >= 2 && data.bairro.size() <= 60 &&
+        data.nota is int && data.nota >= 1 && data.nota <= 5 &&
+        data.comentario is string && data.comentario.size() >= 6 && data.comentario.size() <= 400 &&
+        data.publicado is bool &&
+        data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 &&
+        data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.authorId == reviewId &&
+        (data.authorId == request.auth.uid || isAdmin()) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
     // 4. Collection: /products/{productId}
     match /products/{productId} {
       allow get: if isValidId(productId) && (
-        existing().publicado == true || isAdmin()
+        resource == null ||
+        existing().publicado == true ||
+        isAdmin()
       );
 
       // Query Enforcer: Zero get()/exists() calls inside allow list
@@ -116,6 +141,7 @@ service cloud.firestore {
       allow create: if isValidProduct(incoming()) &&
         isVerifiedUser() &&
         isValidId(productId) &&
+        incoming().authorId == request.auth.uid &&
         incoming().createdAt == request.time &&
         incoming().updatedAt == request.time &&
         isAdmin();
@@ -143,6 +169,7 @@ service cloud.firestore {
 
       allow delete: if isVerifiedUser() &&
         isValidId(productId) &&
+        resource != null &&
         isAdmin();
     }
 
@@ -163,7 +190,60 @@ service cloud.firestore {
       allow update: if false;
 
       allow delete: if isValidId(adminId) &&
+        resource != null &&
         isBootstrappedAdmin();
+    }
+
+    // 6. Collection: /reviews/{reviewId}
+    match /reviews/{reviewId} {
+      allow get: if isValidId(reviewId) && (
+        resource == null ||
+        existing().publicado == true ||
+        (isVerifiedUser() && existing().authorId == request.auth.uid) ||
+        isAdmin()
+      );
+
+      // Query Enforcer: Zero get()/exists() calls inside allow list
+      allow list: if existing().publicado == true || (
+        isVerifiedUser() && existing().authorId == request.auth.uid
+      ) || isBootstrappedAdmin();
+
+      allow create: if isValidCustomerReview(incoming(), reviewId) &&
+        isVerifiedUser() &&
+        isValidId(reviewId) &&
+        reviewId == request.auth.uid &&
+        incoming().authorId == request.auth.uid &&
+        incoming().publicado == true &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if (
+        isValidCustomerReview(incoming(), reviewId) &&
+        isVerifiedUser() &&
+        isValidId(reviewId) &&
+        incoming().authorId == existing().authorId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time && (
+          // Action 1: Admin Moderation (toggle visibility or full moderation)
+          (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['publicado', 'updatedAt'])) ||
+          isAdmin() ||
+          // Action 2: Reviewer edits own review content (cannot override admin visibility state)
+          (
+            existing().authorId == request.auth.uid &&
+            incoming().publicado == existing().publicado &&
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'autorNome', 'bairro', 'nota', 'comentario', 'updatedAt'
+            ])
+          )
+        )
+      );
+
+      allow delete: if isVerifiedUser() &&
+        isValidId(reviewId) &&
+        resource != null && (
+          existing().authorId == request.auth.uid ||
+          isAdmin()
+        );
     }
   }
 }

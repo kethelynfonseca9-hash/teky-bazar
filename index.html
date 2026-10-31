@@ -6,9 +6,9 @@
     <title>TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar</title>
     <meta
       name="description"
-      content="Catálogo online completo da TEKY BAZAR em São Pedro da Aldeia - RJ: materiais de construção, ferragens, madeiras, areia, pedra e bazar. Peça pelo WhatsApp."
+      content="Catálogo online completo da TEKY BAZAR: materiais de construção, ferragens, madeiras, areia, pedra e utilidades. Confira preços e peça direto pelo WhatsApp."
     />
-    <meta name="theme-color" content="#1E5BFF" />
+    <meta name="theme-color" content="#2563EB" />
 
     <!-- Open Graph / Compartilhamento bonito no WhatsApp, Instagram e Facebook -->
     <meta property="og:type" content="website" />
@@ -17,17 +17,17 @@
     <meta property="og:title" content="TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar" />
     <meta
       property="og:description"
-      content="Confira preços de materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia - RJ e peça direto no WhatsApp."
+      content="Catálogo online completo da TEKY BAZAR: materiais de construção, ferragens, madeiras, areia, pedra e utilidades. Confira preços e peça direto pelo WhatsApp."
     />
     <meta property="og:image" content="./img/og-capa.jpg" />
-    <meta property="og:image:alt" content="Catálogo de produtos da loja TEKY BAZAR" />
+    <meta property="og:image:alt" content="Catálogo de produtos da loja TEKY BAZAR em São Pedro da Aldeia - RJ" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="TEKY BAZAR – Catálogo de Materiais de Construção, Ferragens e Bazar" />
     <meta
       name="twitter:description"
-      content="Confira preços de materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia - RJ e peça direto no WhatsApp."
+      content="Catálogo online completo da TEKY BAZAR: materiais de construção, ferragens, madeiras, areia, pedra e utilidades. Confira preços e peça direto pelo WhatsApp."
     />
     <meta name="twitter:image" content="./img/og-capa.jpg" />
 
@@ -38,6 +38,48 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Inicialização imediata do tema (Claro padrão / Escuro) respeitando prefers-color-scheme na 1ª visita -->
+    <script>
+      (function () {
+        try {
+          var salvo = localStorage.getItem("teky_tema");
+          var tema = "light";
+          if (salvo === "dark" || salvo === "light") {
+            tema = salvo;
+          } else if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          ) {
+            tema = "dark";
+          }
+          document.documentElement.setAttribute("data-theme", tema);
+        } catch (_) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+
+    <!-- Inicialização imediata da Abertura Cinematográfica (1x por sessão + fallback seguro) -->
+    <script>
+      (function () {
+        try {
+          if (sessionStorage.getItem("teky_intro_vista_v1") === "1") {
+            document.documentElement.setAttribute("data-intro-done", "true");
+          } else {
+            document.documentElement.setAttribute("data-intro-active", "true");
+            window.__tekyIntroWatchdog = window.setTimeout(function () {
+              document.documentElement.removeAttribute("data-intro-active");
+              document.documentElement.setAttribute("data-intro-done", "true");
+              var el = document.getElementById("intro-teky");
+              if (el) el.hidden = true;
+            }, 6000);
+          }
+        } catch (_) {
+          document.documentElement.setAttribute("data-intro-done", "true");
+        }
+      })();
+    </script>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="./style.css" />
@@ -79,7 +121,165 @@
       }
     </script>
   </head>
-  <body class="bg-white text-[#1F2937] antialiased min-h-screen flex flex-col">
+  <body class="antialiased min-h-screen flex flex-col">
+    <!-- Link de salto rápido para acessibilidade via teclado -->
+    <a href="#conteudo-principal" class="skip-link focus-ring">Pular para o conteúdo principal</a>
+
+    <!-- Abertura Cinematográfica (Intro ~5s: Projeto -> Construção 3D -> Marca TEKY BAZAR) -->
+    <section
+      id="intro-teky"
+      class="intro-teky"
+      data-phase="blueprint"
+      role="region"
+      aria-label="Apresentação de abertura da TEKY BAZAR"
+    >
+      <!-- Painéis de cortina de luz para a transição final de abertura -->
+      <div class="intro-curtain intro-curtain-left" aria-hidden="true">
+        <div class="intro-drafting-grid"></div>
+      </div>
+      <div class="intro-curtain intro-curtain-right" aria-hidden="true">
+        <div class="intro-drafting-grid"></div>
+      </div>
+      <div class="intro-curtain-seam" aria-hidden="true"></div>
+
+      <!-- Canvas 2D leve para poeira de luz, partículas e lens flare -->
+      <canvas id="intro-fx-canvas" class="intro-fx-canvas" aria-hidden="true"></canvas>
+
+      <!-- Controles superiores discretos: Som opcional (desligado por padrão) e Pular introdução -->
+      <div class="intro-topbar">
+        <button
+          type="button"
+          id="intro-btn-som"
+          class="intro-ctrl-btn focus-ring"
+          aria-pressed="false"
+          aria-label="Ativar efeito sonoro da abertura"
+        >
+          <svg
+            id="intro-icone-som-off"
+            class="icon-sm"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5 6 9H3v6h3l5 4V5Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="m22 9-6 6M16 9l6 6" />
+          </svg>
+          <svg
+            id="intro-icone-som-on"
+            hidden
+            class="icon-sm"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5 6 9H3v6h3l5 4V5Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
+          </svg>
+          <span id="intro-rotulo-som">Som</span>
+        </button>
+
+        <button
+          type="button"
+          id="intro-btn-pular"
+          class="intro-ctrl-btn intro-skip-btn focus-ring"
+          aria-label="Pular introdução e ir para a loja"
+        >
+          <span>Pular introdução</span>
+          <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Palco Central com Parallax Suave -->
+      <div id="intro-parallax-stage" class="intro-stage">
+        <!-- Cena SVG: Planta Baixa + Cotas -> Casa Moderna 3D Isométrica -->
+        <div id="intro-svg-scene" class="intro-svg-scene" aria-hidden="true"></div>
+
+        <!-- Revelação da Marca TEKY BAZAR (3,5s – 5,0s) -->
+        <div id="intro-brand-lockup" class="intro-brand-lockup">
+          <!-- Emblema arquitetônico sutil -->
+          <div class="intro-brand-emblem" aria-hidden="true">
+            <svg viewBox="0 0 64 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6 34L32 10L58 34"
+                stroke="url(#emblem-metal-blue)"
+                stroke-width="3.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M16 34V23L32 10L48 23V34"
+                stroke="rgba(226, 232, 240, 0.85)"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path d="M4 38H60" stroke="rgba(96, 165, 250, 0.55)" stroke-width="1.5" stroke-linecap="round" />
+              <defs>
+                <linearGradient id="emblem-metal-blue" x1="6" y1="10" x2="58" y2="34" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#93C5FD" />
+                  <stop offset="50%" stop-color="#FFFFFF" />
+                  <stop offset="100%" stop-color="#3B82F6" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Logotipo com acabamento metálico e shine sweep -->
+          <div class="intro-wordmark-wrap">
+            <p class="intro-wordmark" aria-label="TEKY BAZAR">
+              <span class="intro-wordmark-teky">TEKY</span>
+              <span class="intro-wordmark-bazar">BAZAR</span>
+            </p>
+            <span class="intro-shine-sweep" aria-hidden="true"></span>
+          </div>
+
+          <!-- Slogan com fade e espaçamento animado via GPU transform -->
+          <p id="intro-slogan-text" class="intro-slogan" data-slogan="CONSTRUINDO POSSIBILIDADES">
+            CONSTRUINDO POSSIBILIDADES
+          </p>
+
+          <!-- Botão principal com pulso luminoso suave -->
+          <div class="intro-cta-wrap">
+            <button
+              type="button"
+              id="intro-btn-entrar"
+              class="intro-enter-btn focus-ring"
+              aria-label="Entrar na loja TEKY BAZAR"
+            >
+              <span>ENTRAR NA LOJA</span>
+              <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé discreto da abertura: etapa atual + barra de progresso fina -->
+      <div class="intro-bottombar" aria-hidden="true">
+        <div class="intro-bottom-meta">
+          <span id="intro-phase-label" class="intro-phase-label tabular-nums">01 · Projeto arquitetônico</span>
+        </div>
+        <div class="intro-progress-track">
+          <div id="intro-progress-fill" class="intro-progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fundo Animado Moderno (Aurora difusa + Linhas sutis de planta civil + Malha Canvas) -->
+    <div class="ambient-bg" aria-hidden="true">
+      <div class="aurora-blob aurora-blob-1"></div>
+      <div class="aurora-blob aurora-blob-2"></div>
+      <div class="blueprint-grid"></div>
+      <canvas id="bg-particles-canvas"></canvas>
+    </div>
+
     <!-- 1. ÚNICA NAVEGAÇÃO FIXA NO TOPO (Sticky) -->
     <header class="site-header">
       <div class="container-shell header-inner">
@@ -101,6 +301,45 @@
         </nav>
 
         <div class="header-actions">
+          <!-- Botão de alternância Tema Claro / Tema Escuro -->
+          <button
+            type="button"
+            id="btn-alternar-tema"
+            class="theme-toggle-btn focus-ring"
+            aria-pressed="false"
+            aria-label="Ativar tema escuro"
+            title="Alternar tema claro e escuro"
+          >
+            <!-- Ícone Lua (exibido no tema claro para mudar para escuro) -->
+            <svg id="icone-tema-lua" class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+            </svg>
+            <!-- Ícone Sol (exibido no tema escuro para mudar para claro) -->
+            <svg id="icone-tema-sol" hidden class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+            <span id="texto-tema-header" class="theme-toggle-label">Escuro</span>
+          </button>
+
+          <!-- Botão da Lista de Orçamento (Sacola com múltiplos itens) -->
+          <button
+            type="button"
+            id="btn-abrir-sacola"
+            class="quote-bag-btn focus-ring"
+            aria-label="Abrir lista de orçamento"
+            aria-haspopup="dialog"
+            aria-controls="modal-sacola"
+          >
+            <svg class="icon-sm icon-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="1" />
+              <path stroke-linecap="round" d="M9 12h6M9 16h4" />
+            </svg>
+            <span class="quote-bag-label">Lista</span>
+            <span id="contador-sacola" hidden class="filter-count-badge tabular-nums">0</span>
+          </button>
+
           <!-- Botão discreto de WhatsApp no cabeçalho -->
           <a
             href="https://wa.me/5522997711986"
@@ -113,7 +352,7 @@
             <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
             </svg>
-            <span>WhatsApp</span>
+            <span class="header-wa-label">WhatsApp</span>
           </a>
 
           <!-- Botão Menu Hambúrguer no celular -->
@@ -142,6 +381,15 @@
           <a href="#como-comprar" data-secao-link="como-comprar" class="top-nav-link focus-ring">Como Comprar</a>
           <a href="#entrega" data-secao-link="entrega" class="top-nav-link focus-ring">Entrega e Retirada</a>
           <a href="#contato" data-secao-link="contato" class="top-nav-link focus-ring">Contato</a>
+          <a href="#admin" data-secao-link="admin" class="top-nav-link focus-ring">Área da Loja</a>
+          <button
+            type="button"
+            id="btn-alternar-tema-mobile"
+            class="mobile-theme-row focus-ring"
+            aria-pressed="false"
+          >
+            <span id="texto-tema-mobile">Ativar tema escuro</span>
+          </button>
         </div>
       </nav>
     </header>
@@ -151,18 +399,29 @@
            SEÇÃO 1: CATÁLOGO (#catalogo) — Único com Hero Grande
            =================================================================== -->
       <section id="secao-catalogo" data-secao-painel="catalogo">
-        <!-- Hero Grande (sem repetir "TEKY BAZAR" abaixo da logo) -->
+        <!-- Hero Principal com Título Forte, Subtítulo de Valor e 2 Botões -->
         <div class="hero-band">
           <div class="container-shell hero-inner">
             <div class="hero-copy">
+              <p class="hero-kicker">São Pedro da Aldeia – RJ · Entrega rápida e retirada no balcão</p>
               <h1 class="hero-title">
-                Tudo para sua obra, reforma e casa em um só lugar
+                Tudo para sua obra, reforma e casa com confiança e preço claro
               </h1>
               <p class="hero-subtitle">
-                Materiais de construção, ferragens, madeiras, areia, pedra e bazar em São Pedro da Aldeia – RJ com pedido direto pelo celular.
+                Do básico ao acabamento: materiais de construção, ferragens, madeiras, areia, pedra e bazar com atendimento ágil e orçamento direto pelo celular.
               </p>
             </div>
             <div class="hero-cta-wrap">
+              <a
+                href="#ancora-produtos"
+                id="btn-ver-produtos"
+                class="btn-primary-hero btn-lg focus-ring"
+              >
+                <svg class="icon-md" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+                </svg>
+                <span>Ver produtos</span>
+              </a>
               <a
                 href="https://wa.me/5522997711986"
                 target="_blank"
@@ -173,11 +432,38 @@
                 <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
                 </svg>
-                <span>Chamar no WhatsApp</span>
+                <span>Pedir orçamento no WhatsApp</span>
               </a>
             </div>
           </div>
         </div>
+
+        <!-- Seção de Categorias em Cards com Ícones -->
+        <div class="categories-showcase reveal-on-scroll" aria-label="Departamentos da loja">
+          <div class="container-shell">
+            <div class="section-header-inline">
+              <div>
+                <h2 class="section-subheading">Departamentos da loja</h2>
+                <p class="section-lead">Toque em uma categoria para filtrar os itens do catálogo</p>
+              </div>
+              <button
+                type="button"
+                id="btn-ver-todas-categorias"
+                hidden
+                class="link-reset focus-ring"
+              >
+                Ver todas as categorias
+              </button>
+            </div>
+
+            <div id="grade-categorias-cards" class="category-cards-grid">
+              <!-- Cards das 6 categorias preenchidos e sincronizados via script.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Âncora de rolagem suave para os produtos -->
+        <div id="ancora-produtos" class="catalog-anchor"></div>
 
         <!-- Barra Fixa ao Rolar: Busca + Botão Filtros + Chips de Categoria -->
         <div class="catalog-sticky-controls">
@@ -330,6 +616,203 @@
               >
                 Perguntar no WhatsApp
               </a>
+            </div>
+          </div>
+
+          <!-- Seção "Por que comprar conosco" (somente diferenciais reais da loja) -->
+          <div id="por-que-comprar" class="why-buy-section reveal-on-scroll">
+            <div class="why-buy-header">
+              <h2 class="section-subheading">Por que comprar na TEKY BAZAR</h2>
+              <p class="section-lead">
+                Estrutura pronta para atender desde pequenos reparos residenciais até entregas de obra em São Pedro da Aldeia
+              </p>
+            </div>
+
+            <div class="why-buy-grid">
+              <article class="glass-feature-card reveal-on-scroll">
+                <div class="feature-icon-box" aria-hidden="true">
+                  <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 9h11l-1.5 6H3.5L2 9Z" />
+                    <path d="M4.5 9 7.5 6l3.5 3" />
+                    <path d="M13 11h4.2l2.8 3.2V17h-7v-6Z" />
+                    <path d="M2 17h18" />
+                    <circle cx="6.5" cy="18.5" r="2" />
+                    <circle cx="16.5" cy="18.5" r="2" />
+                  </svg>
+                </div>
+                <h3 class="card-heading">Entrega própria na região</h3>
+                <p class="card-copy">
+                  Caminhão basculante para areia e pedra em m³ e veículo utilitário para cimento, madeiras, ferragens e itens de bazar.
+                </p>
+              </article>
+
+              <article class="glass-feature-card reveal-on-scroll">
+                <div class="feature-icon-box" aria-hidden="true">
+                  <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" />
+                  </svg>
+                </div>
+                <h3 class="card-heading">Orçamento rápido no WhatsApp</h3>
+                <p class="card-copy">
+                  Sem filas e sem cadastro: escolha os itens no catálogo ou envie a lista da sua obra direto para o nosso balcão de vendas.
+                </p>
+              </article>
+
+              <article class="glass-feature-card reveal-on-scroll">
+                <div class="feature-icon-box" aria-hidden="true">
+                  <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18" />
+                    <path d="M5 21V8l7-4 7 4v13" />
+                    <path d="M9 21v-6h6v6" />
+                  </svg>
+                </div>
+                <h3 class="card-heading">Retirada ágil sem frete</h3>
+                <p class="card-copy">
+                  Compre pelo celular e retire seu pedido já separado em nossa loja na Estr. da Cruz – Flexeira (Pinheiros).
+                </p>
+              </article>
+
+              <article class="glass-feature-card reveal-on-scroll">
+                <div class="feature-icon-box" aria-hidden="true">
+                  <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                  </svg>
+                </div>
+                <h3 class="card-heading">Pagamento facilitado</h3>
+                <p class="card-copy">
+                  Preços transparentes por unidade, saco, metro ou m³, aceitando Pix, dinheiro e cartões de débito e crédito.
+                </p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Seção de Avaliações Reais de Clientes + Google Maps -->
+          <div id="avaliacoes-clientes" class="reviews-section reveal-on-scroll">
+            <div class="reviews-header-row">
+              <div>
+                <h2 class="section-subheading">Avaliações de clientes em São Pedro da Aldeia</h2>
+                <p id="resumo-avaliacoes-loja" class="section-lead tabular-nums">
+                  Depoimentos reais verificados de clientes da loja e link direto para o Google Maps
+                </p>
+              </div>
+
+              <div class="reviews-actions-row">
+                <button
+                  type="button"
+                  id="btn-abrir-form-avaliacao"
+                  class="btn-primary-blue btn-sm-height focus-ring"
+                  aria-expanded="false"
+                  aria-controls="painel-form-avaliacao"
+                >
+                  <svg class="icon-sm" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>Deixar avaliação</span>
+                </button>
+
+                <a
+                  id="link-google-maps-avaliacoes"
+                  href="https://www.google.com/maps/search/?api=1&query=TEKY+BAZAR+Estr.+da+Cruz+Flexeira+Sao+Pedro+da+Aldeia+RJ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-outline-sm focus-ring"
+                >
+                  <svg class="icon-sm icon-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                  <span>Ver no Google Maps</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Formulário para cliente enviar avaliação verificada com conta Google -->
+            <form id="painel-form-avaliacao" class="review-form-card" hidden novalidate>
+              <div class="review-form-top">
+                <h3 class="card-heading">Avaliar atendimento e entrega da TEKY BAZAR</h3>
+                <p class="section-lead">
+                  Sua avaliação é vinculada à sua conta Google verificada (seu e-mail nunca é exibido publicamente).
+                </p>
+              </div>
+
+              <div id="avaliacao-feedback" class="admin-feedback-banner" hidden role="status" aria-live="polite"></div>
+
+              <div class="admin-field">
+                <span class="filter-label">Sua nota *</span>
+                <div id="seletor-estrelas-avaliacao" class="star-selector-row" role="radiogroup" aria-label="Nota de 1 a 5 estrelas">
+                  <button type="button" data-estrela="1" class="star-pick-btn focus-ring" aria-label="1 estrela" aria-checked="false" role="radio">★</button>
+                  <button type="button" data-estrela="2" class="star-pick-btn focus-ring" aria-label="2 estrelas" aria-checked="false" role="radio">★</button>
+                  <button type="button" data-estrela="3" class="star-pick-btn focus-ring" aria-label="3 estrelas" aria-checked="false" role="radio">★</button>
+                  <button type="button" data-estrela="4" class="star-pick-btn focus-ring" aria-label="4 estrelas" aria-checked="false" role="radio">★</button>
+                  <button type="button" data-estrela="5" class="star-pick-btn is-active focus-ring" aria-label="5 estrelas" aria-checked="true" role="radio">★</button>
+                  <span id="legenda-estrela-selecionada" class="star-pick-label tabular-nums">5 de 5 estrelas</span>
+                </div>
+                <input type="hidden" id="avaliacao-nota" value="5" />
+              </div>
+
+              <div class="admin-field-row">
+                <div class="admin-field">
+                  <label for="avaliacao-nome" class="filter-label">Seu nome *</label>
+                  <input
+                    type="text"
+                    id="avaliacao-nome"
+                    class="admin-input focus-ring"
+                    placeholder="Ex.: Marcos Silva"
+                    maxlength="60"
+                    required
+                  />
+                </div>
+
+                <div class="admin-field">
+                  <label for="avaliacao-bairro" class="filter-label">Seu bairro *</label>
+                  <input
+                    type="text"
+                    id="avaliacao-bairro"
+                    class="admin-input focus-ring"
+                    placeholder="Ex.: Flexeira, Pinheiros, Centro..."
+                    maxlength="60"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="admin-field">
+                <label for="avaliacao-comentario" class="filter-label">Como foi sua experiência? *</label>
+                <textarea
+                  id="avaliacao-comentario"
+                  class="admin-textarea focus-ring"
+                  rows="3"
+                  placeholder="Conte sobre o atendimento, prazo de entrega ou qualidade dos materiais..."
+                  maxlength="400"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="admin-form-actions">
+                <button type="submit" id="btn-enviar-avaliacao" class="btn-primary-blue focus-ring">
+                  Publicar avaliação verificada
+                </button>
+                <button type="button" id="btn-cancelar-avaliacao" class="btn-outline-sm focus-ring">
+                  Fechar
+                </button>
+              </div>
+            </form>
+
+            <!-- Grade de avaliações reais sincronizadas via Firebase -->
+            <div id="grade-avaliacoes-clientes" class="reviews-grid" hidden></div>
+
+            <!-- Estado inicial transparente quando ainda não há avaliações salvas na nuvem -->
+            <div id="estado-vazio-avaliacoes" class="reviews-empty-card">
+              <div>
+                <h3 class="card-heading">Já comprou na TEKY BAZAR?</h3>
+                <p class="card-copy">
+                  Seja um dos primeiros clientes de São Pedro da Aldeia a registrar sua avaliação aqui no site ou confira nossa localização no Google Maps.
+                </p>
+              </div>
+              <button type="button" id="btn-vazio-avaliar" class="btn-outline-sm focus-ring">
+                Avaliar agora
+              </button>
             </div>
           </div>
         </div>
@@ -660,7 +1143,7 @@
                   href="tel:+5522997711986"
                   class="btn-secondary w-full focus-ring"
                 >
-                  <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg class="icon-sm icon-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5Z" />
                   </svg>
                   <span>Ligar (22) 99771-1986</span>
@@ -852,15 +1335,33 @@
                 </div>
 
                 <div class="admin-field">
-                  <label for="admin-imagem" class="filter-label">Foto (caminho local ou URL https) *</label>
+                  <label for="admin-imagem" class="filter-label">Foto (caminho local .webp/.jpg ou URL https) *</label>
                   <input
                     type="text"
                     id="admin-imagem"
                     class="admin-input focus-ring"
-                    placeholder="img/cimento-cp2.jpg"
+                    placeholder="img/cimento-cp2.webp"
                     maxlength="500"
                     required
                   />
+                  <!-- Conversor de fotos reais do celular para formato WebP leve -->
+                  <div class="webp-converter-box">
+                    <input type="file" id="admin-arquivo-foto-webp" accept="image/*" hidden />
+                    <button type="button" id="btn-converter-foto-webp" class="btn-outline-sm focus-ring">
+                      Converter foto do celular para .webp leve
+                    </button>
+                    <p id="admin-webp-status" class="webp-helper-text">
+                      Comprime fotos reais do estoque/caminhão em WebP para carregar rápido no 4G.
+                    </p>
+                    <a
+                      id="admin-webp-download"
+                      hidden
+                      download="produto.webp"
+                      class="link-reset focus-ring"
+                    >
+                      Baixar arquivo .webp otimizado
+                    </a>
+                  </div>
                 </div>
 
                 <div class="admin-field">
@@ -916,46 +1417,128 @@
                 <div id="admin-lista-produtos" class="admin-items-list"></div>
               </div>
             </div>
+
+            <!-- Moderação de Avaliações de Clientes -->
+            <div class="info-card admin-list-card">
+              <div class="admin-list-header">
+                <div>
+                  <h2 class="section-subheading">Avaliações de clientes no site</h2>
+                  <p id="admin-contador-avaliacoes" class="admin-count-text tabular-nums">0 avaliações publicadas</p>
+                </div>
+              </div>
+              <div id="admin-lista-avaliacoes" class="admin-items-list"></div>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Rodapé com Link do Instagram e acesso discreto da loja -->
+    <!-- Rodapé Completo com Endereço, Horário, Telefone/WhatsApp, Redes Sociais e Mapa -->
     <footer class="site-footer">
-      <div class="container-shell footer-inner">
-        <div class="footer-brand">
+      <div class="container-shell footer-grid">
+        <!-- Coluna 1: Marca, Resumo, Redes Sociais e Links -->
+        <div class="footer-col">
           <p class="footer-title" id="rodape-nome-loja">TEKY BAZAR</p>
-          <p class="footer-meta">
-            Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195 · (22) 99771-1986
+          <p class="footer-description">
+            Materiais de construção, ferragens, madeiras, areia, pedra e bazar com atendimento direto e entrega rápida em São Pedro da Aldeia – RJ.
           </p>
+
+          <div class="footer-social-row">
+            <a
+              id="link-instagram"
+              href="https://instagram.com/tekybazar"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="instagram-link focus-ring"
+              aria-label="Visitar perfil da TEKY BAZAR no Instagram"
+            >
+              <svg class="icon-sm icon-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+              </svg>
+              <span>@tekybazar</span>
+            </a>
+
+            <a
+              href="https://wa.me/5522997711986"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-whatsapp-geral
+              class="btn-whatsapp btn-whatsapp-discreto focus-ring"
+            >
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+              </svg>
+              <span>WhatsApp</span>
+            </a>
+          </div>
+
+          <nav class="footer-nav-links" aria-label="Links do rodapé">
+            <a href="#catalogo" data-secao-link="catalogo" class="footer-text-link focus-ring">Catálogo</a>
+            <span aria-hidden="true">·</span>
+            <a href="#como-comprar" data-secao-link="como-comprar" class="footer-text-link focus-ring">Como Comprar</a>
+            <span aria-hidden="true">·</span>
+            <a href="#entrega" data-secao-link="entrega" class="footer-text-link focus-ring">Entrega</a>
+            <span aria-hidden="true">·</span>
+            <a href="#contato" data-secao-link="contato" class="footer-text-link focus-ring">Contato</a>
+            <span aria-hidden="true">·</span>
+            <a href="#admin" data-secao-link="admin" class="admin-footer-link focus-ring">Área da Loja</a>
+          </nav>
         </div>
 
-        <div class="footer-actions">
-          <a
-            id="link-instagram"
-            href="https://instagram.com/tekybazar"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="instagram-link focus-ring"
-            aria-label="Visitar perfil da TEKY BAZAR no Instagram"
-          >
-            <svg class="icon-sm text-[#1E5BFF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-            </svg>
-            <span>Siga no Instagram</span>
-          </a>
-
-          <a
-            href="#admin"
-            data-secao-link="admin"
-            class="admin-footer-link focus-ring"
-          >
-            Área da Loja
-          </a>
+        <!-- Coluna 2: Endereço, Horário de Funcionamento e Telefone -->
+        <div class="footer-col">
+          <h2 class="footer-heading">Atendimento e endereço</h2>
+          <ul class="footer-info-list">
+            <li>
+              <strong class="footer-info-label">Endereço:</strong>
+              <span id="rodape-endereco">Estr. da Cruz – Flexeira (Pinheiros), São Pedro da Aldeia – RJ, CEP 28946-195</span>
+            </li>
+            <li>
+              <strong class="footer-info-label">Horário:</strong>
+              <span>Segunda a Sexta: 08h às 18h · Sábado: 08h às 15h · Domingo: Fechado</span>
+            </li>
+            <li>
+              <strong class="footer-info-label">Telefone / WhatsApp:</strong>
+              <a id="rodape-telefone-link" href="tel:+5522997711986" class="footer-phone-link tabular-nums focus-ring">
+                <span id="rodape-telefone">(22) 99771-1986</span>
+              </a>
+            </li>
+          </ul>
         </div>
+
+        <!-- Coluna 3: Mapa Incorporado Compacto e Rota -->
+        <div class="footer-col">
+          <div class="footer-map-header">
+            <h2 class="footer-heading">Localização</h2>
+            <a
+              id="rodape-link-rota"
+              href="https://www.google.com/maps/dir//Estr.%20da%20Cruz%20-%20Flexeira%20(Pinheiros)%2C%20S%C3%A3o%20Pedro%20da%20Aldeia%20-%20RJ%2C%20CEP%2028946-195"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-route-link focus-ring"
+            >
+              Abrir no Google Maps →
+            </a>
+          </div>
+          <div class="footer-map-box">
+            <iframe
+              id="rodape-mapa-iframe"
+              title="Mapa da localização da loja TEKY BAZAR em São Pedro da Aldeia - RJ"
+              src="https://maps.google.com/maps?q=Estr.%20da%20Cruz%20-%20Flexeira%20(Pinheiros)%2C%20S%C3%A3o%20Pedro%20da%20Aldeia%20-%20RJ%2C%20CEP%2028946-195&z=15&ie=UTF8&iwloc=&output=embed"
+              class="footer-map-iframe"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-shell footer-bottom-bar">
+        <p class="footer-copyright">
+          © <span id="ano-atual">2026</span> TEKY BAZAR · Todos os direitos reservados · Valores sujeitos a confirmação de estoque.
+        </p>
       </div>
     </footer>
 
@@ -1007,6 +1590,23 @@
             </span>
           </div>
 
+          <!-- Quantidade + Adicionar à Lista de Orçamento no Modal -->
+          <div class="modal-bag-row">
+            <div class="qty-stepper" aria-label="Selecionar quantidade">
+              <button type="button" id="modal-qtd-menos" class="qty-step-btn focus-ring" aria-label="Diminuir quantidade">−</button>
+              <span id="modal-qtd-valor" class="qty-step-val tabular-nums">1</span>
+              <button type="button" id="modal-qtd-mais" class="qty-step-btn focus-ring" aria-label="Aumentar quantidade">+</button>
+            </div>
+
+            <button
+              type="button"
+              id="modal-btn-adicionar-lista"
+              class="btn-primary-blue modal-add-bag-btn focus-ring"
+            >
+              <span>+ Adicionar à lista</span>
+            </button>
+          </div>
+
           <a
             id="modal-btn-whatsapp"
             href="https://wa.me/5522997711986"
@@ -1017,20 +1617,132 @@
             <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
             </svg>
-            <span>Pedir no WhatsApp</span>
+            <span>Pedir só este item no WhatsApp</span>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Botão Flutuante de WhatsApp (somente computador > 768px) -->
+    <!-- Modal / Gaveta da Lista de Orçamento (Sacola com Múltiplos Itens) -->
+    <div
+      id="modal-sacola"
+      hidden
+      class="modal-backdrop bag-drawer-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sacola-titulo"
+    >
+      <div class="bag-drawer-panel">
+        <div class="bag-drawer-header">
+          <div>
+            <h2 id="sacola-titulo" class="modal-title">Minha Lista de Orçamento</h2>
+            <p id="sacola-subtitulo" class="section-lead tabular-nums">Monte sua lista de materiais e envie tudo junto no WhatsApp</p>
+          </div>
+          <button
+            type="button"
+            id="btn-fechar-sacola"
+            class="modal-close-btn bag-close-static focus-ring"
+            aria-label="Fechar lista de orçamento"
+          >
+            <svg class="icon-md" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="bag-drawer-body">
+          <!-- Estado vazio da sacola -->
+          <div id="sacola-vazia" class="bag-empty-box">
+            <p class="empty-title">Sua lista ainda está vazia</p>
+            <p class="empty-desc">
+              Toque em <strong>"+ Lista"</strong> nos produtos do catálogo para juntar cimento, areia, pedra, madeiras ou ferragens em um único orçamento.
+            </p>
+            <button type="button" id="btn-sacola-explorar" class="btn-primary-blue focus-ring">
+              Escolher produtos no catálogo
+            </button>
+          </div>
+
+          <!-- Itens adicionados -->
+          <div id="sacola-conteudo-cheio" hidden class="bag-filled-wrap">
+            <div id="sacola-lista-itens" class="bag-items-list"></div>
+
+            <!-- Opções de entrega / retirada para já ir na mensagem do WhatsApp -->
+            <div class="bag-delivery-box">
+              <p class="filter-label">Como prefere receber?</p>
+              <div class="bag-delivery-radios">
+                <label class="bag-radio-option">
+                  <input type="radio" name="sacola-modalidade" value="entrega" checked />
+                  <span>Entrega no endereço</span>
+                </label>
+                <label class="bag-radio-option">
+                  <input type="radio" name="sacola-modalidade" value="retirada" />
+                  <span>Retirar na loja (sem frete)</span>
+                </label>
+              </div>
+
+              <div id="sacola-campo-bairro-wrap" class="admin-field">
+                <label for="sacola-bairro" class="filter-label">Bairro para cálculo do frete</label>
+                <input
+                  type="text"
+                  id="sacola-bairro"
+                  class="admin-input focus-ring"
+                  placeholder="Ex.: Flexeira, Pinheiros, Centro, São João..."
+                  maxlength="80"
+                />
+              </div>
+
+              <div class="admin-field">
+                <label for="sacola-observacao" class="filter-label">Observações (opcional)</label>
+                <input
+                  type="text"
+                  id="sacola-observacao"
+                  class="admin-input focus-ring"
+                  placeholder="Ex.: Pagamento no Pix, entregar pela manhã..."
+                  maxlength="140"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rodapé fixo da sacola com total estimado e botão WhatsApp -->
+        <div id="sacola-rodape" hidden class="bag-drawer-footer">
+          <div class="bag-total-row">
+            <div>
+              <span class="bag-total-label">Total estimado dos itens</span>
+              <span class="bag-total-note">(frete a confirmar conforme bairro)</span>
+            </div>
+            <strong id="sacola-total-estimado" class="bag-total-value tabular-nums">R$ 0,00</strong>
+          </div>
+
+          <a
+            id="btn-enviar-lista-whatsapp"
+            href="https://wa.me/5522997711986"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-whatsapp btn-lg w-full focus-ring"
+          >
+            <svg class="icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+            </svg>
+            <span>Enviar lista completa no WhatsApp</span>
+          </a>
+
+          <button type="button" id="btn-limpar-sacola" class="link-reset bag-clear-btn focus-ring">
+            Esvaziar lista
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão Flutuante de WhatsApp sempre visível (celular e computador) -->
     <a
       href="https://wa.me/5522997711986"
       target="_blank"
       rel="noopener noreferrer"
       data-whatsapp-geral
       class="whatsapp-fab focus-ring"
-      aria-label="Conversar no WhatsApp com a TEKY BAZAR"
+      aria-label="Pedir orçamento no WhatsApp da TEKY BAZAR"
     >
       <svg class="icon-lg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M20.52 3.48A11.82 11.82 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.87 11.87 0 0 0 5.73 1.46h.01c6.55 0 11.89-5.34 11.9-11.9a11.82 11.82 0 0 0-3.45-8.42ZM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.98 1-3.66-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.89-9.89 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
@@ -1080,6 +1792,7 @@
 
     <!-- Scripts -->
     <script src="./env-config.js" onerror="window.ENV_CONFIG={}"></script>
+    <script type="module" src="./src/intro-teky.ts"></script>
     <script src="./script.js" defer></script>
     <script type="module" src="./src/firebase-catalog.ts"></script>
   </body>

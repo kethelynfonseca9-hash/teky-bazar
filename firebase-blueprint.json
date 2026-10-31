@@ -50,7 +50,7 @@
         },
         "imagem": {
           "type": "string",
-          "description": "Caminho local (img/...) ou URL HTTPS da foto do produto.",
+          "description": "Caminho local otimizado (img/*.webp ou img/*.jpg) ou URL HTTPS da foto do produto.",
           "minLength": 4,
           "maxLength": 500
         },
@@ -147,6 +147,66 @@
         "grantedBy",
         "createdAt"
       ]
+    },
+    "CustomerReview": {
+      "title": "CustomerReview",
+      "description": "Avaliação verificada de cliente da TEKY BAZAR sem armazenamento de PII sensível (e-mail ou telefone).",
+      "type": "object",
+      "properties": {
+        "autorNome": {
+          "type": "string",
+          "description": "Nome público curto informado pelo cliente.",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "bairro": {
+          "type": "string",
+          "description": "Bairro ou localidade em São Pedro da Aldeia / região.",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "nota": {
+          "type": "number",
+          "description": "Nota inteira de 1 a 5 estrelas."
+        },
+        "comentario": {
+          "type": "string",
+          "description": "Depoimento real do cliente sobre atendimento, entrega ou produtos.",
+          "minLength": 6,
+          "maxLength": 400
+        },
+        "publicado": {
+          "type": "boolean",
+          "description": "Define se a avaliação está visível publicamente no mural."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID do cliente autenticado (1 avaliação por UID = reviewId).",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Carimbo de data/hora do servidor na criação."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Carimbo de data/hora do servidor na última edição."
+        }
+      },
+      "required": [
+        "autorNome",
+        "bairro",
+        "nota",
+        "comentario",
+        "publicado",
+        "authorId",
+        "createdAt",
+        "updatedAt"
+      ]
     }
   },
   "firestore": {
@@ -161,6 +221,12 @@
         "$ref": "#/entities/AdminRecord"
       },
       "description": "Coleção restrita de UIDs com permissão administrativa adicional."
+    },
+    "/reviews/{reviewId}": {
+      "schema": {
+        "$ref": "#/entities/CustomerReview"
+      },
+      "description": "Coleção de avaliações reais de clientes verificados (1 avaliação por UID, sem PII)."
     }
   }
 }

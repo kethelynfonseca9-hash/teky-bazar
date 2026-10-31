@@ -6,6 +6,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -22,6 +23,7 @@ import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 const PROJECT_ID = 'demo-teky-bazar-rules';
 const OWNER_UID = 'owner_uid_01';
 const OWNER_EMAIL = 'kethelyn.fonseca9@gmail.com';
+const DELEGATED_ADMIN_UID = 'delegated_admin_02';
 const ATTACKER_UID = 'attacker_uid_99';
 
 function buildValidProduct(authorId = OWNER_UID) {
@@ -32,7 +34,7 @@ function buildValidProduct(authorId = OWNER_UID) {
     preco: 36.9,
     unidade: 'saco 50kg',
     descricao: 'Cimento Portland composto de secagem rápida e alta resistência.',
-    imagem: 'img/cimento-cp2.jpg',
+    imagem: 'img/cimento-cp2.webp',
     disponivel: true,
     promocao: true,
     precoPromocional: 35.9,
@@ -66,7 +68,7 @@ describe('TEKY BAZAR Firestore Security Rules — Dirty Dozen Suite', () => {
     }
   });
 
-  it('allows verified store owner to create a valid product and public visitors to query published products', async () => {
+  it('allows verified store owner and delegated admins to manage products and public visitors to query published products', async () => {
     const adminDb = testEnv
       .authenticatedContext(OWNER_UID, {
         email: OWNER_EMAIL,
@@ -75,6 +77,32 @@ describe('TEKY BAZAR Firestore Security Rules — Dirty Dozen Suite', () => {
       .firestore();
 
     await assertSucceeds(setDoc(doc(adminDb, 'products', 'prod-1'), buildValidProduct()));
+
+    // Bootstrapped admin grants delegated admin access
+    await assertSucceeds(
+      setDoc(doc(adminDb, 'admins', DELEGATED_ADMIN_UID), {
+        uid: DELEGATED_ADMIN_UID,
+        displayName: 'Gerente Loja',
+        grantedBy: OWNER_UID,
+        createdAt: serverTimestamp(),
+      })
+    );
+
+    // Delegated admin can update stock/price without changing authorId
+    const delegatedDb = testEnv
+      .authenticatedContext(DELEGATED_ADMIN_UID, {
+        email: 'gerente@example.com',
+        email_verified: true,
+      })
+      .firestore();
+
+    await assertSucceeds(
+      updateDoc(doc(delegatedDb, 'products', 'prod-1'), {
+        disponivel: false,
+        publicado: true,
+        updatedAt: serverTimestamp(),
+      })
+    );
 
     const publicDb = testEnv.unauthenticatedContext().firestore();
     await assertSucceeds(
@@ -248,5 +276,83 @@ describe('TEKY BAZAR Firestore Security Rules — Dirty Dozen Suite', () => {
       })
       .firestore();
     await assertFails(getDocs(collection(adminDb, 'admins')));
+  });
+
+  it('enforces one-per-UID verified customer reviews, safe getDoc pre-checks, admin moderation, and blocks self-republishing', async () => {
+    const customerUid = 'customer_01';
+    const customerDb = testEnv
+      .authenticatedContext(customerUid, {
+        email: 'cliente@example.com',
+        email_verified: true,
+      })
+      .firestore();
+
+    // Safe getDoc pre-check before review exists succeeds with exists() === false
+    await assertSucceeds(getDoc(doc(customerDb, 'reviews', customerUid)));
+
+    const validReview = {
+      autorNome: 'Carlos Mendes',
+      bairro: 'Flexeira',
+      nota: 5,
+      comentario: 'Entrega super rápida de areia e cimento, atendimento nota dez!',
+      publicado: true,
+      authorId: customerUid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    // Valid 1-per-UID creation succeeds
+    await assertSucceeds(setDoc(doc(customerDb, 'reviews', customerUid), validReview));
+
+    // Customer can edit their own review content
+    await assertSucceeds(
+      updateDoc(doc(customerDb, 'reviews', customerUid), {
+        comentario: 'Entrega rápida no mesmo dia e cimento bem armazenado!',
+        updatedAt: serverTimestamp(),
+      })
+    );
+
+    // Spamming a second review under a different ID fails
+    await assertFails(setDoc(doc(customerDb, 'reviews', 'review-2'), validReview));
+
+    // Public query with where(publicado == true) succeeds
+    const publicDb = testEnv.unauthenticatedContext().firestore();
+    await assertSucceeds(
+      getDocs(query(collection(publicDb, 'reviews'), where('publicado', '==', true)))
+    );
+
+    // Store admin can moderate (hide) review without deleting it
+    const adminDb = testEnv
+      .authenticatedContext(OWNER_UID, {
+        email: OWNER_EMAIL,
+        email_verified: true,
+      })
+      .firestore();
+    await assertSucceeds(
+      updateDoc(doc(adminDb, 'reviews', customerUid), {
+        publicado: false,
+        updatedAt: serverTimestamp(),
+      })
+    );
+
+    // Moderated customer cannot flip publicado back to true
+    await assertFails(
+      updateDoc(doc(customerDb, 'reviews', customerUid), {
+        publicado: true,
+        updatedAt: serverTimestamp(),
+      })
+    );
+
+    // Non-owner cannot delete another customer's review
+    const attackerDb = testEnv
+      .authenticatedContext(ATTACKER_UID, {
+        email: 'attacker@example.com',
+        email_verified: true,
+      })
+      .firestore();
+    await assertFails(deleteDoc(doc(attackerDb, 'reviews', customerUid)));
+
+    // Store admin can delete review
+    await assertSucceeds(deleteDoc(doc(adminDb, 'reviews', customerUid)));
   });
 });
